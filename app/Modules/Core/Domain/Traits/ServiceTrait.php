@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Traits;
+namespace App\Modules\Core\Domain\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -16,18 +16,22 @@ trait ServiceTrait
      *
      * protected Model $model;
      */
-    protected Model $model;
+
+    private function model(): Model
+    {
+        return app($this->model);
+    }
 
     protected function newQuery(array $relations = []): Builder
     {
-        return $this->model
+        return $this->model()
             ->newQuery()
             ->with($relations);
     }
 
     public function create(array $attributes): Model
     {
-        return $this->model->create($attributes);
+        return $this->model()->create($attributes);
     }
 
     public function all(

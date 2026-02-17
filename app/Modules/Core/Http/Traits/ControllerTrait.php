@@ -20,11 +20,6 @@ trait ControllerTrait
      * protected string $resource;  // JsonResource class name (FQCN)
      * protected string $request;   // FormRequest class name (FQCN) for store/update
      */
-    protected string $service;
-
-    protected string $resource;
-
-    protected string $request;
 
     protected function service(): object
     {
