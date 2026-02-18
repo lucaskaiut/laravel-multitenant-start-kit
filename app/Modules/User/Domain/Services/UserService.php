@@ -3,6 +3,7 @@
 namespace App\Modules\User\Domain\Services;
 
 use App\Models\User;
+use App\Modules\Company\Domain\Scopes\CompanyScope;
 use App\Modules\Company\Domain\Services\CompanyService;
 use App\Modules\Core\Domain\Contracts\ServiceContract;
 use App\Modules\Core\Domain\Traits\ServiceTrait;
@@ -18,12 +19,12 @@ class UserService implements ServiceContract
     {
         $company = app(CompanyService::class)->create($data['company']);
 
-        return $company->users()->create($data['user']);
+        return $company->users()->createQuietly($data['user']);
     }
 
     public function login(array $data): User
     {
-        $user = $this->findBy(['email' => $data['email']])->first();
+        $user = User::withoutGlobalScope(CompanyScope::class)->where(['email' => $data['email']])->first();
 
         if (!$user) {
             throw new \Exception('Invalid credentials');
